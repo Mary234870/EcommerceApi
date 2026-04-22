@@ -1,6 +1,10 @@
 package com.ws101.marino.bantillo.EcommerceApi.controller;
 
+import com.ws101.marino.bantillo.EcommerceApi.dto.ProductRequest;
 import com.ws101.marino.bantillo.EcommerceApi.model.Product;
+
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,11 +37,21 @@ public class ProductController {
 
     // POST → 201 Created
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        product.setId(nextId++);
-        products.add(product);
-        return ResponseEntity.status(201).body(product);
-    }
+    public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductRequest request) {
+
+    Product product = new Product(); // ✅ create object first
+
+    product.setId(nextId++);
+    product.setName(request.getName());
+    product.setPrice(request.getPrice());
+    product.setCategory(request.getCategory());
+    product.setStockQuantity(request.getStockQuantity());
+
+    products.add(product);
+
+    return ResponseEntity.status(201).body(product);
+}
+    
 
     // PUT → 200 OK or 404 Not Found
     @PutMapping("/{id}")
