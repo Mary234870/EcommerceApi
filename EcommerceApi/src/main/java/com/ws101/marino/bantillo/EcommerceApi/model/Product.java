@@ -18,7 +18,7 @@ public class Product {
     private String description;
     private double price;
 
-    // ❌ replaced String → Category
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
