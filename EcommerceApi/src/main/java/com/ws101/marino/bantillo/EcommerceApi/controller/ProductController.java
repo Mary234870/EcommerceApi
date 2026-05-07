@@ -71,6 +71,25 @@ public class ProductController {
         return ResponseEntity.notFound().build();
     }
 
+
+    // PUT partially update product 
+    @PatchMapping("/{id}")
+    public ResponseEntity<Product>partialUpdateProduct(@PathVariable Long id, @RequestBody Product partialProduct) {
+        return productService.getProductById(id)
+            .map(existing -> {
+                if (partialProduct.getName() != null) existing.setName(partialProduct.getName());
+                if (partialProduct.getDescription() != null) existing.setDescription(partialProduct.getDescription());
+                if (partialProduct.getPrice() != 0) existing.setPrice(partialProduct.getPrice());
+                if (partialProduct.getCategory() != null) existing.setCategory(partialProduct.getCategory());
+                if (partialProduct.getStockQuantity() != 0) existing.setStockQuantity(partialProduct.getStockQuantity());
+                if (partialProduct.getImageUrl() != null) existing.setImageUrl(partialProduct.getImageUrl());
+
+                return productService.updateProduct(id, existing).orElse(null);
+            })
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+    }
+
     // DELETE → 204 No Content or 404 Not Found
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
