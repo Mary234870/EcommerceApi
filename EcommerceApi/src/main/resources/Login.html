@@ -1,0 +1,73 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - E-Commerce</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Sign In</h1>
+        
+        <form class="login-form" id="loginForm">
+            <div class="form-group">
+                <label for="login-email">Email address</label>
+                <input type="email" id="login-email" name="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" name="password" placeholder="Enter your password" required>
+            </div>
+
+            <button type="submit" class="btn">Sign In</button>
+            
+            <p class="link-text">
+                New here? <a href="signup.html">Create an account →</a>
+            </p>
+        </form>
+    </div>
+
+    <script>
+        // ✅ NO MORE CSRF — NOT NEEDED FOR JWT
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); // Stop normal submit
+
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                // ✅ USE CORRECT JWT LOGIN API URL
+                const response = await fetch('http://localhost:8080/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json' // ✅ JSON format
+                    },
+                    body: JSON.stringify({ // ✅ Send JSON data
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if(response.ok && data.token) {
+                    // ✅ SAVE TOKEN & USER INFO
+                    localStorage.setItem('jwtToken', data.token);
+                    localStorage.setItem('userEmail', data.email);
+                    localStorage.setItem('userName', email.split('@')[0]); // save name
+
+                    alert('✅ Login successful!');
+                    window.location.href = 'landing.html'; // ✅ Redirect to landing page
+                } else {
+                    alert('❌ Login failed! Check email and password.');
+                }
+            } catch(err) {
+                alert('❌ Error: ' + err.message + ' — Cannot connect to server.');
+            }
+        });
+    </script>
+</body>
+          </html>
