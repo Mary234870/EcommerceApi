@@ -1,4 +1,4 @@
-package com.ws101.marino.bantillo.EcommerceApi.entity;
+package com.ws101.marino.bantillo.EcommerceApi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
