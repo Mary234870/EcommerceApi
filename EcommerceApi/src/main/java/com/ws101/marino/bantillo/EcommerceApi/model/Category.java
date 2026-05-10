@@ -1,8 +1,22 @@
+package com.ws101.marino.bantillo.EcommerceApi.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "categories")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Category {
 
     @Id
@@ -10,4 +24,13 @@ public class Category {
     private Long id;
 
     private String name;
-}
+
+    // LAZY + @JsonIgnore SO NO ERROR WHEN ADDING
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Product> products = new ArrayList<>();
+
+    public Category(String name) {
+        this.name = name;
+    }
+    }
