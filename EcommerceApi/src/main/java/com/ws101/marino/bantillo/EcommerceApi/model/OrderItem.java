@@ -1,17 +1,23 @@
-package com.example.ecommerce.entity;
+package com.ws101.marino.bantillo.EcommerceApi.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
- * Represents a product inside an order.
- * Each item belongs to one order and one product.
+ * Entity representing an item inside an Order.
+ * Each OrderItem refers to one Product and belongs to one Order.
  */
 @Entity
 @Table(name = "order_items")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class OrderItem {
 
     @Id
@@ -19,17 +25,14 @@ public class OrderItem {
     private Long id;
 
     private int quantity;
+    private double price;
 
-    /**
-     * Many items belong to one order.
-     */
+    // Relationship: Many OrderItems belong to one Order
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
 
-    /**
-     * Many order items reference one product.
-     */
+    // Relationship: One OrderItem refers to one Product
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
