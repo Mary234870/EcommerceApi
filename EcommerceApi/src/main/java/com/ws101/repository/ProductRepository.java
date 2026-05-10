@@ -2,18 +2,19 @@ package com.ws101.marino.bantillo.EcommerceApi.repository;
 
 import com.ws101.marino.bantillo.EcommerceApi.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-
-    // Find products by category name
-    List<Product> findByCategory_Name(String name);
-
-    // Find products within price range
-    @Query("SELECT p FROM Product p WHERE p.price BETWEEN :min AND :max")
-    List<Product> findProductsByPriceRange(@Param("min") double min,
-                                           @Param("max") double max);
-}
+    
+    // Finds products by category name
+    List<Product> findByCategoryName(String categoryName);
+    
+    // Finds products by name containing keyword
+    List<Product> findByNameContainingIgnoreCase(String name);
+    
+    // Finds products within a price range
+    List<Product> findByPriceBetween(double min, double max);
+                                                 } 
