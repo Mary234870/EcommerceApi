@@ -1,0 +1,25 @@
+package com.ws101.marino.bantillo.EcommerceApi.service;
+
+import com.ws101.marino.bantillo.EcommerceApi.model.User;
+import com.ws101.marino.bantillo.EcommerceApi.repository.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+@Service
+public class CustomUserDetailsService implements UserDetailsService {
+
+    private final UserRepository userRepository;
+
+    public CustomUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
+        if (user == null) throw new UsernameNotFoundException("User not found: " + email);
+        return user;
+    }
+  }
